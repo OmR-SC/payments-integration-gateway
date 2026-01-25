@@ -3,12 +3,13 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.Xsl;
 using Application.DTOs.Banking;
+using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Integration;
 
-public class BankingIntegrationService
+public class BankingIntegrationService : IBankingIntegrationService
 {
 
     private readonly ILogger<BankingIntegrationService> _logger;
