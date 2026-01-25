@@ -1,6 +1,7 @@
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.Xsl;
 using Application.DTOs.Banking;
 using Domain.Entities;
 using Microsoft.Extensions.Logging;
@@ -64,4 +65,42 @@ public class BankingIntegrationService
         }
     }
 
+    public string TransformToLegacyFormat(string inputXml)
+    {
+        _logger.LogInformation("Transforming XML to legacy format.");
+
+        try
+        {
+            var xsltPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Integration", "Templates", "LegacyBank.xslt");
+
+            if (!File.Exists(xsltPath))
+            {
+                throw new FileNotFoundException($"XSLT Template not found at: {xsltPath}");
+            }
+
+            var xlst = new XslCompiledTransform();
+            xlst.Load(xsltPath);
+
+            var xsltArgs = new XsltArgumentList();
+            xsltArgs.AddParam("CurrentDate", "", DateTime.UtcNow.ToString("s")); 
+
+            using var stringReader = new StringReader(inputXml);
+            using var xmlReader = XmlReader.Create(stringReader);
+
+            using var stringWriter = new StringWriter();
+            using var xmlWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings { Indent = true});
+
+            xlst.Transform(xmlReader, xsltArgs, xmlWriter);
+
+            var transformedXml = stringWriter.ToString();
+            _logger.LogInformation("XSLT Transformation completed successfully.");
+
+            return transformedXml;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error executing XSLT transformation.");
+            throw;
+        }
+    }
 }

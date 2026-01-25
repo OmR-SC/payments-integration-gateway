@@ -34,15 +34,19 @@ public class PaymentController : ControllerBase
                 request.CardNumber
             );
 
-            // // --- CÓDIGO TEMPORAL PARA PROBAR XML ---
-            // var xmlDto = _bankingService.MapToXmlDto(result); // result es el pago creado
-            // var xmlString = _bankingService.GenerateBankXml(xmlDto);
+            // // 2. GENERAR XML Y TRANSFORMAR
+            // var xmlDto = _bankingService.MapToXmlDto(result);
+            // var originalXml = _bankingService.GenerateBankXml(xmlDto);
+            
+            // // Transformar usando XSLT
+            // var legacyXml = _bankingService.TransformToLegacyFormat(originalXml);
 
-            // // Lo imprimimos en la consola de la API para verlo
-            // Console.WriteLine("============= XML GENERADO =============");
-            // Console.WriteLine(xmlString);
-            // Console.WriteLine("========================================");
-            // // ---------------------------------------
+            // Console.WriteLine("\n============= XML ORIGINAL (C#) =============");
+            // Console.WriteLine(originalXml);
+            
+            // Console.WriteLine("\n============= XML TRANSFORMADO =============");
+            // Console.WriteLine(legacyXml);
+            // Console.WriteLine("========================================================\n");
 
             return Ok(result);
         }
