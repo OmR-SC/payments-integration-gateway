@@ -1,6 +1,7 @@
 
 
 using Application.Interfaces;
+using Infrastructure.Integration;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -8,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 public class PaymentController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
-    public PaymentController(IPaymentService paymentService)
+    private readonly BankingIntegrationService _bankingService;
+    public PaymentController(IPaymentService paymentService, BankingIntegrationService bankingService)
     {
         _paymentService = paymentService;
+        _bankingService = bankingService;
     }
 
     [HttpPost]
@@ -30,6 +33,16 @@ public class PaymentController : ControllerBase
                 request.MerchantOrderId,
                 request.CardNumber
             );
+
+            // // --- CÓDIGO TEMPORAL PARA PROBAR XML ---
+            // var xmlDto = _bankingService.MapToXmlDto(result); // result es el pago creado
+            // var xmlString = _bankingService.GenerateBankXml(xmlDto);
+
+            // // Lo imprimimos en la consola de la API para verlo
+            // Console.WriteLine("============= XML GENERADO =============");
+            // Console.WriteLine(xmlString);
+            // Console.WriteLine("========================================");
+            // // ---------------------------------------
 
             return Ok(result);
         }

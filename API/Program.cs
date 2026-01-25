@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Application.Services;
+using Infrastructure.Integration;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<BankingIntegrationService, BankingIntegrationService>();
 
 //Application
 builder.Services.AddScoped<IPaymentService, PaymentService>();
