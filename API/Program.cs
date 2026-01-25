@@ -13,7 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-builder.Services.AddScoped<BankingIntegrationService, BankingIntegrationService>();
+builder.Services.AddScoped<IBankingIntegrationService, BankingIntegrationService>();
 
 //Application
 builder.Services.AddScoped<IPaymentService, PaymentService>();

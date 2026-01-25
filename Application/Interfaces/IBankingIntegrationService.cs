@@ -2,7 +2,7 @@ using Application.DTOs.Banking;
 using Domain.Entities;
 
 namespace Application.Interfaces;
-public interface IBankinIntegrationService
+public interface IBankingIntegrationService
 {
     PaymentXmlDto MapToXmlDto(Payment payment);
     string GenerateBankXml(PaymentXmlDto xmlDto);

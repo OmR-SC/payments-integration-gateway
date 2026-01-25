@@ -9,11 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 public class PaymentController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
-    private readonly BankingIntegrationService _bankingService;
-    public PaymentController(IPaymentService paymentService, BankingIntegrationService bankingService)
+
+    public PaymentController(IPaymentService paymentService)
     {
         _paymentService = paymentService;
-        _bankingService = bankingService;
     }
 
     [HttpPost]
@@ -33,20 +32,6 @@ public class PaymentController : ControllerBase
                 request.MerchantOrderId,
                 request.CardNumber
             );
-
-            // // 2. GENERAR XML Y TRANSFORMAR
-            // var xmlDto = _bankingService.MapToXmlDto(result);
-            // var originalXml = _bankingService.GenerateBankXml(xmlDto);
-            
-            // // Transformar usando XSLT
-            // var legacyXml = _bankingService.TransformToLegacyFormat(originalXml);
-
-            // Console.WriteLine("\n============= XML ORIGINAL (C#) =============");
-            // Console.WriteLine(originalXml);
-            
-            // Console.WriteLine("\n============= XML TRANSFORMADO =============");
-            // Console.WriteLine(legacyXml);
-            // Console.WriteLine("========================================================\n");
 
             return Ok(result);
         }
