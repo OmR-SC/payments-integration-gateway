@@ -6,4 +6,6 @@ public interface IBankinIntegrationService
 {
     PaymentXmlDto MapToXmlDto(Payment payment);
     string GenerateBankXml(PaymentXmlDto xmlDto);
+
+    string TransformToLegacyFormat(string inputXml);
 }
