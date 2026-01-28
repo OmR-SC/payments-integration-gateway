@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: pg-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password123! # Contraseña provisional
+
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+
+  api:
+    image: payments-integation-gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: payments-integration-gateway-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=PaymentIntegrationGatewayDb;User Id=sa;Password=Password123!;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+
+volumes:
+  sqlvolume:
